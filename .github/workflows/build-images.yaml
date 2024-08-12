@@ -1,0 +1,24 @@
+name: Push Images to ghcr.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  push-images:
+    runs-on: arc-runner-set
+    strategy:
+      matrix:
+        src: [ 'images/runner' ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login
+        run: |
+          echo ${{ secrets.CR_PAT }} | docker login ghcr.io -u USERNAME --password-stdin
+      - name: Build and push
+        run: |
+          cd ${{ matrix.src }}
+          IMAGE=$(cat repo.txt):latest
+          docker build -t $IMAGE .
+          docker push $IMAGE
