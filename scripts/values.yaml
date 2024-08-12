@@ -1,0 +1,64 @@
+githubConfigUrl: "https://github.com/kamuiroeru-org"
+githubConfigSecret:
+  github_app_id: [xxxx]
+  github_app_installation_id: [xxxx]
+  github_app_private_key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    [xxxx]
+    -----END RSA PRIVATE KEY-----
+
+containerMode:
+  type: "dind"
+template:
+  spec:
+    initContainers:
+      # 初期値の init-dind-externals だと Duplicate エラーになるので、 -avoid-conflict suffix をつける。
+      - name: init-dind-externals-avoid-conflict
+        image: ghcr.io/actions/actions-runner:latest
+        command:
+          ["cp", "-r", "-v", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+        volumeMounts:
+          - name: dind-externals
+            mountPath: /home/runner/tmpDir
+    containers:
+      - name: runner
+        image: ghcr.io/kamuiroeru-org/actions-runner:latest
+        command: ["/home/runner/run.sh"]
+        env:
+          - name: DOCKER_HOST
+            value: unix:///run/docker/docker.sock
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+          - name: dind-sock
+            mountPath: /run/docker
+            readOnly: true
+      - name: dind
+        image: docker:dind
+        args:
+          - dockerd
+          - --host=unix:///run/docker/docker.sock
+          - --group=$(DOCKER_GROUP_GID)
+        env:
+          - name: DOCKER_GROUP_GID
+            value: "123"
+          # FIX: https://github.com/actions/actions-runner-controller/issues/3159
+          - name: DOCKER_IPTABLES_LEGACY
+            value: "1"
+        securityContext:
+          privileged: true
+        volumeMounts:
+          - name: work
+            mountPath: /home/runner/_work
+          - name: dind-sock
+            mountPath: /run/docker
+          - name: dind-externals
+            mountPath: /home/runner/externals
+    # Duplicate エラーになるのでコメントアウトする。コメントアウトしてもエラーにならない。（じゃあなんで元々存在したんや？）
+    # volumes:
+    #   - name: work
+    #     emptyDir: {}
+    #   - name: dind-sock
+    #     emptyDir: {}
+    #   - name: dind-externals
+    #     emptyDir: {}
