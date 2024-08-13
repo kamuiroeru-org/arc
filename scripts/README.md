@@ -41,7 +41,7 @@ helm -n "${ARC_RUNNER_NAMESPACE}" uninstall "${ARC_RUNNER_HELM_INSTALLATION_NAME
 helm -n "${ARC_CONTROLLER_NAMESPACE}" uninstall "${ARC_CONTROLLER_HELM_INSTALLATION_NAME}"
 ```
 
-## How to warm up / cool down runners
+## How to warm up or cool down runners
 You can set [min/max Runners by helm values](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners-with-actions-runner-controller/deploying-runner-scale-sets-with-actions-runner-controller#setting-the-maximum-and-minimum-number-of-runners). We provide the wrapper script to change these.
 
 ### Warm up
@@ -58,3 +58,10 @@ WARM_UP_RUNNER_COUNT=5 ./warm_up_runner-set.sh
 cd build
 ./cool_down_runner-set.sh
 ```
+
+## How to update ARC version
+You must reinstall ARC if you want to change chart version.
+
+1. Undeploy. See [How to Undeploy](#how-to-undeploy)
+2. Change `ARC_VERSION` in your settings.sh
+3. Deploy. See [How to deploy - 3. Deploy](#3-deploy)
