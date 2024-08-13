@@ -1,9 +1,9 @@
-INSTALLATION_NAME="arc-runner-set"
-NAMESPACE="arc-runners"
-helm install "${INSTALLATION_NAME}" \
-    --namespace "${NAMESPACE}" \
-    --create-namespace \
-    --version 0.9.3 \
-    oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set \
-    -f values.yaml
+cd $(dirname $0)
+source settings.sh
 
+helm install "${ARC_RUNNER_HELM_INSTALLATION_NAME}" \
+  --namespace "${ARC_RUNNER_NAMESPACE}" \
+  --create-namespace \
+  --version "${ARC_VERSION}" \
+  "${ARC_RUNNER_OCI_CHART}" \
+  -f values.yaml

@@ -1,11 +1,14 @@
-githubConfigUrl: "https://github.com/kamuiroeru-org"
+githubConfigUrl: "https://github.com/[org]"  # or "https://github.com/[org]/[repo]"
 githubConfigSecret:
+  # Use Github App to authenticate
   github_app_id: [xxxx]
   github_app_installation_id: [xxxx]
   github_app_private_key: |
     -----BEGIN RSA PRIVATE KEY-----
     [xxxx]
     -----END RSA PRIVATE KEY-----
+  # or Use Personal Access Token to authenticate
+  github_token: [xxxx_PAT]
 
 containerMode:
   type: "dind"
