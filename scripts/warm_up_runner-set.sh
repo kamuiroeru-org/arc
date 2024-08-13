@@ -1,5 +1,5 @@
 cd $(dirname $0)
-source settings.sh
+. settings.sh
 
 # Warm up 2 runners default.
 WARM_UP_RUNNER_COUNT=${WARM_UP_RUNNER_COUNT:-2}

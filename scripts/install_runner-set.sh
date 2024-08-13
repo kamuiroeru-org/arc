@@ -1,5 +1,5 @@
 cd $(dirname $0)
-source settings.sh
+. settings.sh
 
 helm install "${ARC_RUNNER_HELM_INSTALLATION_NAME}" \
   --namespace "${ARC_RUNNER_NAMESPACE}" \

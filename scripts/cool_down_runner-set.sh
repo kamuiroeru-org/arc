@@ -1,5 +1,5 @@
 cd $(dirname $0)
-source settings.sh
+. settings.sh
 
 
 helm -n "${ARC_RUNNER_NAMESPACE}" upgrade --reuse-values "${ARC_RUNNER_HELM_INSTALLATION_NAME}" \
