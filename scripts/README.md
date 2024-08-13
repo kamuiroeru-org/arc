@@ -25,7 +25,8 @@ cd build
 
 #### 3. Deploy
 ```sh
-./install_controller.sh && ./install_runner-set.sh
+## sleep 10 seconds to wait controller deploy complete
+./install_controller.sh && sleep 10 && ./install_runner-set.sh
 ```
 
 Enjoy!
